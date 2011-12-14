@@ -45,17 +45,17 @@ jQuery(document).ready(function() {
             events: {
                 load: function() {
     
-                    // set up the updating of the chart every five seconds
+                    // set up the updating of the chart every two seconds
                     var series = this.series[0];
                     var shiftalong = series.data.length > 20;
                     
                     setInterval(function() {
                         $.getJSON('/getloadavg', function(response) {
-                            var point = [ response.timestamp, response.loadavg ];
-                            alert("point: " + point);
+                            var point = [ response.timestamp * 1000,
+                            response.loadavg - 0 ];
                             series.addPoint(point, true, shiftalong);
                         })
-                    }, 5000);
+                    }, 2000);
                 }
             }
         },
@@ -69,12 +69,7 @@ jQuery(document).ready(function() {
         yAxis: {
             title: {
                 text: 'Load average'
-            },
-            plotLines: [{
-                value: 0,
-                width: 1,
-                color: '#808080'
-            }]
+            }
         },
         tooltip: {
             formatter: function() {
