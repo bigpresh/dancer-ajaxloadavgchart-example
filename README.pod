@@ -1,0 +1,15 @@
+=head1 README
+
+This is a simple demostration app thrown together for a post on the Dancer
+Advent Calendar to illustrate a simple Dancer app providing information via
+AJAX, to be consumed by L<HighCharts|http://www.highcharts.com/> to provide a
+dynamically-updating graph.
+
+The advent calendar post in question is:
+
+L<http://advent.perldancer.org/2011/14>
+
+=head1 AUTHOR
+
+David Precious C<< <davidp@preshweb.co.uk> >>
+
