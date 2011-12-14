@@ -1,0 +1,112 @@
+ 
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+<!-- script type="text/javascript" src="http://code.jquery.com/jquery-1.7.js"></script -->
+
+<script type="text/javascript">
+jQuery.noConflict();
+</script>
+
+<script type="text/javascript" src="/javascripts/highcharts/js/highcharts.js"></script>
+<script type="text/javascript" src="/javascripts/highcharts/modules/exporting.js"></script>
+
+
+<script type="text/javascript">
+var example = 'dynamic-update',
+    theme = 'default';
+</script>
+
+<script type="text/javascript" src="/javascripts/highcharts/demo/scripts.js"></script>
+
+<script type="text/javascript">
+    Highcharts.theme = { colors: ['#4572A7'] };// prevent errors in default theme
+    var highchartsOptions = Highcharts.getOptions(); 
+</script>
+
+<link rel="stylesheet" href="/javascripts/highchart/templates/yoo_symphony/css/template.css" type="text/css" />
+<link rel="stylesheet" href="/javascripts/highchart/templates/yoo_symphony/css/variations/brown.css" type="text/css" />
+<link href="/javascripts/highchart/demo/demo.css" rel="stylesheet" type="text/css" />
+
+<script type="text/javascript">
+
+Highcharts.setOptions({
+    global: {
+        useUTC: false
+    }
+});
+
+var chart;
+jQuery(document).ready(function() {
+    chart = new Highcharts.Chart({
+        chart: {
+            renderTo: 'container',
+            defaultSeriesType: 'spline',
+            marginRight: 10,
+            events: {
+                load: function() {
+    
+                    // set up the updating of the chart every five seconds
+                    var series = this.series[0];
+                    var shiftalong = series.data.length > 20;
+                    
+                    setInterval(function() {
+                        $.getJSON('/getloadavg', function(response) {
+                            var point = [ response.timestamp, response.loadavg ];
+                            alert("point: " + point);
+                            series.addPoint(point, true, shiftalong);
+                        })
+                    }, 5000);
+                }
+            }
+        },
+        title: {
+            text: 'Live load average'
+        },
+        xAxis: {
+            type: 'datetime',
+            tickPixelInterval: 150
+        },
+        yAxis: {
+            title: {
+                text: 'Load average'
+            },
+            plotLines: [{
+                value: 0,
+                width: 1,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            formatter: function() {
+                    return '<b>'+ this.series.name +'</b><br/>'+
+                    Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) +'<br/>'+ 
+                    Highcharts.numberFormat(this.y, 2);
+            }
+        },
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            enabled: false
+        },
+        series: [{
+            name: 'Load average',
+            data: []
+        }]
+    });
+    
+    
+});
+</script>
+
+<h1>Dancer AJAX Charting demo</h1>
+
+<div id="container" class="highcharts-container" 
+    style="height:410px; margin: 0 2em; clear:both; min-width: 600px">
+
+<p>
+The above is a simple graph fetching data asynchronously from our Dancer
+application via AJAX.
+</p>
+
+
