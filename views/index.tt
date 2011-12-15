@@ -46,10 +46,11 @@ jQuery(document).ready(function() {
                 load: function() {
     
                     // set up the updating of the chart every two seconds
-                    var series = this.series[0];
-                    var shiftalong = series.data.length > 20;
-                    
+
+                    var out = this;
                     setInterval(function() {
+                        var series = out.series[0];
+                        var shiftalong = series.data.length > 20;
                         $.getJSON('/getloadavg', function(response) {
                             var point = [ response.timestamp * 1000,
                             response.loadavg - 0 ];
